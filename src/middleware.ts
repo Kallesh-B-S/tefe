@@ -18,9 +18,9 @@ export function middleware(req: NextRequest) {
     const isLoggedIn = cookie?.value === 'true';
 
     // If the user is not logged in, redirect to the home page
-    if (!isLoggedIn) {
-        return NextResponse.redirect(new URL('/', req.url));
-    }
+    // if (!isLoggedIn) {
+    //     return NextResponse.redirect(new URL('/', req.url));
+    // }
 
     // If the user is logged in, allow the request to proceed
     return NextResponse.next();

@@ -1,5 +1,7 @@
 "use client"
 
+import RouteButton from "./components/RouteBtn";
+
 export default function Home() {
   return (
     <>
@@ -25,14 +27,17 @@ export default function Home() {
           <div className="mx-8 my-5">
             <h1 className="text-[black] font-bold mb-5">Welcome to USCIB Carnet portal!</h1>
             <div className="mb-5 flex justify-center">
-              <div className="bg-gray-200 p-2 md:p-5 md:w-[40%] lg:w-[25%] font-oswald select-none rounded-md">
+              <div className="bg-gray-200 p-2 md:p-5 md:w-[40%] lg:w-[25%] font-roboto select-none rounded-md">
                 <div className="flex justify-center text-[1.2rem] font-bold">Sign in</div>
                 <div className="flex flex-col gap-1">
                   <div className=""><label htmlFor="loginEmail">Email</label></div>
                   <div><input type="text" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" id="loginEmail" /></div>
                   <div>Password</div>
                   <div><input type="password" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" /></div>
-                  <div className="flex justify-end mt-1"><button type="button" className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm pb-1 !cursor-pointer font-bold text-gray-600 active:bg-green-900 active:text-white hover:text-green-900">Login</button></div>
+                  <div className="flex justify-end mt-1">
+                    {/* <button type="button" className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm pb-1 !cursor-pointer font-bold text-gray-600 active:bg-green-900 active:text-white hover:text-green-900">Login</button> */}
+                    <RouteButton route={"/home"} name={"Login"} className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm p-0.5 !cursor-pointer font-bold text-gray-600 active:bg-white active:text-black active:font-normal hover:bg-black hover:text-white hover:font-normal"/>
+                  </div>
                   <div className="flex justify-end text-[0.7rem] "><span className="!cursor-pointer">Forgot Password?</span></div>
                   <div className="text-sm">Dont have an account? Register</div>
                 </div>
