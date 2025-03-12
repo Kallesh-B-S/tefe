@@ -33,16 +33,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { slug: string[] };
 }>) {
+  const isRootPath = params.slug?.length === 0; 
+  // console.log(isRootPath,params.slug);
+  
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${roboto.variable} antialiased`}
       >
         <StoreProvider>
+          {isRootPath && 
           <Navbar />
+          }
           {children}
         </StoreProvider>
 

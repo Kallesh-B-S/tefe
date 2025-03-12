@@ -11,7 +11,7 @@ const Navbar = ()=>{
             </svg>
           </div>
           <div className="navbarImage w-[60px] h-[60px] md:ml-10 xl:ml-32">
-            <Image src={"/img/landingPage/uscib_logo_green_type2-square.jpg"} alt="" className="w-full h-full" />
+            <Image src={"/fe/img/landingPage/uscib_logo_green_type2-square.jpg"} alt="" className="w-full h-full" width={100} height={100} />
           </div>
           <div className="navbarItems hidden md:block md:flex-grow md:justify-end font-oswald tc1 text-[15px] font-extrabold">
             <div className="flex justify-end space-x-10 pr-10 xl:pr-32">
