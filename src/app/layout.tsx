@@ -34,13 +34,10 @@ export const metadata: Metadata = {
 // Define the layout component
 export default async function RootLayout({
   children,
-  params, // Accept params directly
 }: {
   children: React.ReactNode;
-  params: Promise<{ slug: string[]}>; // Adjust based on your routing structure
 }) {
   // Check if the current path is the root
-  const {slug} = await params;
   // console.log(Boolean(slug));
   
 
@@ -51,7 +48,7 @@ export default async function RootLayout({
       >
         <StoreProvider>
           {/* Conditionally render Navbar based on the current path */}
-          {slug && <Navbar />}
+          {<Navbar />}
           {children}
         </StoreProvider>
       </body>
