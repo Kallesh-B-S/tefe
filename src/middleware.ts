@@ -3,19 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export function middleware(req: NextRequest) {
-    // if (req.nextUrl.pathname === '/home') {
-    //     return NextResponse.redirect(new URL('/', req.url));
-    // }
+    if (req.nextUrl.pathname === '/homedfer') {
+        return NextResponse.redirect(new URL('/', req.url));
+    }
 
     // return NextResponse.next();
 
     //--------------------------
 
     // Get the cookie
-    const cookie = req.cookies.get('isLoggedIn');
+    // const cookie = req.cookies.get('isLoggedIn');
 
     // Check if the cookie exists and its value is 'true'
-    const isLoggedIn = cookie?.value === 'true';
+    // const isLoggedIn = cookie?.value === 'true';
 
     // If the user is not logged in, redirect to the home page
     // if (!isLoggedIn) {

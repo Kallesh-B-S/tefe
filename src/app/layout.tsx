@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Oswald, Roboto } from "next/font/google";
 import "./globals.css";
 
 import StoreProvider from "@/StoreProvider";
+import Navbar from "./components/nav/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${roboto.variable} antialiased`}
       >
         <StoreProvider>
+          <Navbar />
           {children}
         </StoreProvider>
 

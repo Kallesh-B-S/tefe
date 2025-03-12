@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <div>
-        <div className="navbar sticky top-0 h-[100px] md:h-[80px] w-full flex justify-center items-center md:justify-start md:space-x-10 bg-[#FFFFFF] select-none">
+        {/* <div className="navbar sticky top-0 h-[100px] md:h-[80px] w-full flex justify-center items-center md:justify-start md:space-x-10 bg-[#FFFFFF] select-none">
           <div className="navbarIcom block md:hidden absolute top-10 left-5">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={4} stroke="#5c7b7d" className="size-7">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -21,7 +21,7 @@ export default function Home() {
               <div className="!cursor-pointer">About</div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="signin" />
         <div className="pageDescription bg-[#f4f4f4] md:px-5 py-1">
           <div className="mx-8 my-5">
