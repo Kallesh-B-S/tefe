@@ -47,6 +47,7 @@ export default function HomePage() {
           dispatch(clearCredentials())
           router.push('/');
         }
+
         // setData(response.data);
 
       } catch (err) {
@@ -75,7 +76,7 @@ export default function HomePage() {
           {/* <h1>Service Providers</h1> */}
           <h2 className="p-5">Click <span>here</span> to add new Service Provider.</h2>
         </div>
-        <div className=" m-auto flex w-[90%] flex-wrap justify-evenly gap-1 py-10">
+        <div className=" m-auto flex w-[90%] flex-wrap justify-evenly py-10">
           {
             // [
             //   {
@@ -89,14 +90,50 @@ export default function HomePage() {
             //     SPID: 23,
             //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
             //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
+            //   },
+            //   {
+            //     Service_Provider_Name: 'CORPORATION FOR INTERNATIONAL BUSINESS',
+            //     SPID: 23,
+            //     CARNETSTATUS: ['Open Claim', 'Possible Claim', 'Valid'],
+            //     Carnet_Count: [6, 12, 36]
             //   }
-            // ]
+            // ].map((x: {
             pieChartSelector.data.map((x: {
               Service_Provider_Name: string;
               Carnet_Count: number[];
               CARNETSTATUS: string[];
             }, i) => (
-              <div key={x.Service_Provider_Name + i} className="bg-gray-300 rounded-2xl">
+              <div key={x.Service_Provider_Name + i} className="bg-gray-300 rounded-2xl m-5">
                 <div className="flex w-[250px] h-[50px] text-[12px] items-center p-1 text-center justify-center overflow-hidden ">
                   {x.Service_Provider_Name.toUpperCase()}
                 </div>
