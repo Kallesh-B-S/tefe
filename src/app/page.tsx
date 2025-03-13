@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "./reduxToolKit/hooks";
 import { setLoginEmail, setLoginPassword } from "./reduxToolKit/slice/LoginSlice";
 import { RootState } from "./reduxToolKit/store";
+import Navbar from "./components/nav/Navbar";
 
 
 
@@ -17,7 +18,7 @@ export default function Home() {
   const router = useRouter();
   const dispatch = useAppDispatch()
   // const selector = useAppSelector(state=>state.loginForm);
-  const loginFormSelector = useSelector((state:RootState)=>state.loginForm)
+  const loginFormSelector = useSelector((state: RootState) => state.loginForm)
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setEmail(e.target.value);
@@ -35,18 +36,19 @@ export default function Home() {
       // await axios.post('https://dev.alphaomegainfosys.com/test-api/auth/login', { p_emailaddr:email,p_password:password });
       router.push('/home'); // Redirect to /ab page after submission
       // console.log(loginFormSelector);
-      
+
     } catch (error) {
       console.error('Error sending data:', error);
     }
 
     // console.log("data",email,password);
-    
+
   };
 
   return (
     <>
       <div>
+        <Navbar />
         {/* <div className="navbar sticky top-0 h-[100px] md:h-[80px] w-full flex justify-center items-center md:justify-start md:space-x-10 bg-[#FFFFFF] select-none">
           <div className="navbarIcom block md:hidden absolute top-10 left-5">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={4} stroke="#5c7b7d" className="size-7">
@@ -73,9 +75,9 @@ export default function Home() {
                 <div className="flex flex-col gap-1">
                   <div className=""><label htmlFor="loginEmail">Email</label></div>
                   <div><input
-                   value={loginFormSelector?.p_emailaddr ? loginFormSelector?.p_emailaddr : ""}
-                   onChange={handleChangeEmail}
-                   type="text" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" id="loginEmail" /></div>
+                    value={loginFormSelector?.p_emailaddr ? loginFormSelector?.p_emailaddr : ""}
+                    onChange={handleChangeEmail}
+                    type="text" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" id="loginEmail" /></div>
                   <div>Password</div>
                   <div><input
                     value={loginFormSelector?.p_password ? loginFormSelector?.p_password : ""}
@@ -83,7 +85,7 @@ export default function Home() {
                     type="password" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" /></div>
                   <div className="flex justify-end mt-1">
                     {/* <button type="button" className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm pb-1 !cursor-pointer font-bold text-gray-600 active:bg-green-900 active:text-white hover:text-green-900">Login</button> */}
-                    <RouteButton  onClick={handleSubmit} name={"Login"} className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm p-0.5 !cursor-pointer font-bold text-gray-600 active:bg-white active:text-black active:font-normal hover:bg-black hover:text-white hover:font-normal" />
+                    <RouteButton onClick={handleSubmit} name={"Login"} className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm p-0.5 !cursor-pointer font-bold text-gray-600 active:bg-white active:text-black active:font-normal hover:bg-black hover:text-white hover:font-normal" />
                   </div>
                   <div className="flex justify-end text-[0.7rem] "><span className="!cursor-pointer">Forgot Password?</span></div>
                   <div className="text-sm">Dont have an account? Register</div>

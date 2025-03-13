@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reduxToolKit/store";
 import { setPieChartData } from "../reduxToolKit/slice/PieChartSlice";
+import Navbar from "../components/nav/Navbar";
+import { domainNameResolver } from "../helper/functions";
 
 // Ensure this is the very first line
 
@@ -15,12 +17,12 @@ export default function HomePage() {
   // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const loginFormSelector = useSelector((state:RootState)=>state.loginForm)
-  const pieChartSelector = useSelector((state:RootState)=>state.pieChart)
+  const loginFormSelector = useSelector((state: RootState) => state.loginForm)
+  const pieChartSelector = useSelector((state: RootState) => state.pieChart)
   const dispatch = useDispatch();
 
   // console.log(loginFormSelector);
-  
+
 
   // console.log(loginFormSelector?.p_emailaddr);
   // console.log(loginFormSelector?.p_password);
@@ -28,14 +30,14 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-      
 
-        const response = await axios.post('http://localhost:3000/auth/login',
+        const domain = domainNameResolver(window.location.hostname)
+        const response = await axios.post(`${domain}/auth/login`,
           { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
-        console.log("response ----------------------",response);
+        console.log("response ----------------------", response);
         dispatch(setPieChartData(response.data.chartResult))
         // setData(response.data);
-        
+
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message); // Safe to set as it's an instance of Error
@@ -56,6 +58,7 @@ export default function HomePage() {
 
   return (
     <>
+      <Navbar />
       <div className="w-[97vw] bg-[#f4f4f4] flex flex-col justify-center mx-5">
         <div className="m-2">
           {/* <h1>Service Providers</h1> */}
@@ -77,10 +80,10 @@ export default function HomePage() {
             //     Carnet_Count: [6, 12, 36]
             //   }
             // ]
-            pieChartSelector.data.map((x:{
-              Service_Provider_Name:string;
-              Carnet_Count:number[];
-              CARNETSTATUS:string[];
+            pieChartSelector.data.map((x: {
+              Service_Provider_Name: string;
+              Carnet_Count: number[];
+              CARNETSTATUS: string[];
             }, i) => (
               <div key={x.Service_Provider_Name + i} className="bg-gray-300 rounded-2xl">
                 <div className="flex w-[250px] h-[50px] text-[12px] items-center p-1 text-center justify-center overflow-hidden ">

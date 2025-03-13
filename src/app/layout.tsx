@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Oswald, Roboto } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/nav/Navbar";
+// import Navbar from "./components/nav/Navbar";
 import StoreProvider from "./reduxToolKit/provider";
 
 const geistSans = Geist({
@@ -47,7 +47,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${roboto.variable} antialiased`}
       >
           {/* Conditionally render Navbar based on the current path */}
-          {<Navbar />}
+          {/* {<Navbar />} */}
           <StoreProvider>
           {children}
           </StoreProvider>
