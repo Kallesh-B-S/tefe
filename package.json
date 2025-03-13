@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
     "@types/chart.js": "^2.9.41",
+    "axios": "^1.8.3",
     "chart.js": "^4.4.8",
     "next": "15.2.1",
     "react": "^19.0.0",
