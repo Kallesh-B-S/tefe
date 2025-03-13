@@ -9,12 +9,15 @@ import { RootState } from "../reduxToolKit/store";
 import { setPieChartData } from "../reduxToolKit/slice/PieChartSlice";
 import Navbar from "../components/nav/Navbar";
 import { domainNameResolver } from "../helper/functions";
+import { clearCredentials, setLoginError } from "../reduxToolKit/slice/LoginSlice";
+import { useRouter } from "next/navigation";
 
 // Ensure this is the very first line
 
 export default function HomePage() {
 
   // const [data, setData] = useState([]);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const loginFormSelector = useSelector((state: RootState) => state.loginForm)
@@ -35,7 +38,15 @@ export default function HomePage() {
         const response = await axios.post(`${domain}/auth/login`,
           { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
         console.log("response ----------------------", response);
-        dispatch(setPieChartData(response.data.chartResult))
+        if(response.data.chartResult){
+          dispatch(setPieChartData(response.data.chartResult))
+          dispatch(clearCredentials())
+        }
+        else if(response.data.error){
+          dispatch(setLoginError(response.data.error))
+          dispatch(clearCredentials())
+          router.push('/');
+        }
         // setData(response.data);
 
       } catch (err) {

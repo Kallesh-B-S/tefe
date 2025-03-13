@@ -1,12 +1,12 @@
 "use client"
 
 import RouteButton from "./components/RouteBtn";
-import React from 'react';
+import React, { useEffect } from 'react';
 // import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./reduxToolKit/hooks";
-import { setLoginEmail, setLoginPassword } from "./reduxToolKit/slice/LoginSlice";
+import { setLoginEmail, setLoginError, setLoginPassword } from "./reduxToolKit/slice/LoginSlice";
 import { RootState } from "./reduxToolKit/store";
 import Navbar from "./components/nav/Navbar";
 
@@ -45,6 +45,18 @@ export default function Home() {
 
   };
 
+  useEffect(() => {
+    // If there's an error, set a timeout to clear it after 5 seconds
+    if (loginFormSelector.error) {
+      const timer = setTimeout(() => {
+        dispatch(setLoginError(null));
+      }, 3000);
+
+      // Cleanup the timer on component unmount or when error changes
+      return () => clearTimeout(timer);
+    }
+  }, [loginFormSelector.error]);
+
   return (
     <>
       <div>
@@ -71,17 +83,20 @@ export default function Home() {
             <h1 className="text-[black] font-bold mb-5">Welcome to USCIB Carnet portal!</h1>
             <div className="mb-5 flex justify-center">
               <div className="bg-gray-200 p-2 md:p-5 md:w-[40%] lg:w-[25%] font-roboto select-none rounded-md">
+                {loginFormSelector.error && <div className="text-red-500 flex justify-center">{loginFormSelector.error}</div>}
                 <div className="flex justify-center text-[1.2rem] font-bold">Sign in</div>
                 <div className="flex flex-col gap-1">
                   <div className=""><label htmlFor="loginEmail">Email</label></div>
                   <div><input
                     value={loginFormSelector?.p_emailaddr ? loginFormSelector?.p_emailaddr : ""}
                     onChange={handleChangeEmail}
+                    // onFocus={()=>dispatch(clearLoginError())}
                     type="text" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" id="loginEmail" /></div>
                   <div>Password</div>
                   <div><input
                     value={loginFormSelector?.p_password ? loginFormSelector?.p_password : ""}
                     onChange={handleChangePassword}
+                    // onFocus={()=>dispatch(clearLoginError())}
                     type="password" className="bg-[#FFFFFF] w-full outline-0 border-0 p-1 rounded-md" /></div>
                   <div className="flex justify-end mt-1">
                     {/* <button type="button" className="bg-[#FFFFFF] w-[3.5rem]  rounded-sm pb-1 !cursor-pointer font-bold text-gray-600 active:bg-green-900 active:text-white hover:text-green-900">Login</button> */}
