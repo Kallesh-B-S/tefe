@@ -12,6 +12,8 @@ import { domainNameResolver } from "../helper/functions";
 import { clearCredentials, setLoginError } from "../reduxToolKit/slice/LoginSlice";
 import { useRouter } from "next/navigation";
 import BasicDetailsTable, { BasicDetailsType } from "./BasicDetailsTable";
+import ParamTable, { ParamTableType } from "./ParamTable";
+import paramTableDataSet from "@/lib/sample-data/paramTableData.json"
 
 // Ensure this is the very first line
 
@@ -39,6 +41,8 @@ export default function HomePage() {
     CARGOSURETY: '035',
     ZIP: '60173'
   }]
+
+  let paramTableData:ParamTableType[] = paramTableDataSet;
 
   const [isTable1Expanded, setIsTable1Expanded] = useState(true);
   const [isTable2Expanded, setIsTable2Expanded] = useState(true);
@@ -204,7 +208,7 @@ export default function HomePage() {
             <div className={`overflow-hidden transition-all duration-300 ${isTable2Expanded ? 'max-h-full' : 'max-h-0'}`}>
               <div className="w-[90%] bg-white m-auto p-2">
                 {/* Content for table 2 goes here */}
-                <p>This is the content of table 2.</p>
+                <ParamTable data={paramTableData}/>
               </div>
             </div>
           </div>
