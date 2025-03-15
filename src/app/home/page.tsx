@@ -42,7 +42,7 @@ export default function HomePage() {
     ZIP: '60173'
   }]
 
-  let paramTableData:ParamTableType[] = paramTableDataSet;
+  let paramTableData: ParamTableType[] = paramTableDataSet.slice(0, 5);
 
   const [isTable1Expanded, setIsTable1Expanded] = useState(true);
   const [isTable2Expanded, setIsTable2Expanded] = useState(true);
@@ -115,7 +115,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <div className="w-[97vw] bg-[#f4f4f4] flex flex-col justify-center mx-5">
+      <div className="w-[97vw] bg-[#f4f4f4] flex flex-col justify-center mx-5 ">
         <div className="m-2">
           {/* <h1>Service Providers</h1> */}
           <h2 className="p-5">Click <span>here</span> to add new Service Provider.</h2>
@@ -189,7 +189,7 @@ export default function HomePage() {
           }
         </div> */}
 
-        <div className="bg-red-100 flex flex-col p-1 m-1 w-[99.4%] h-[40vh]">
+        <div className="bg-red-100 flex flex-col p-1 m-1 w-[99.4%] h-[80vh] overflow-y-auto">
           <div className="w-full">
             <div onClick={toggleTable1} className="cursor-pointer flex justify-between items-center">
               <h2 className="font-bold">table 1</h2>

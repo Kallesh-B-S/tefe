@@ -55,7 +55,10 @@ function ParamTable({ data }: props) {
     const columnHelper = createColumnHelper<ParamTableType>();
 
     const columns = columnHeadersArray.map((columnName) => {
-        return columnHelper.accessor(columnName, {
+        return columnHelper.accessor((row) => {
+            const value = row[columnName]
+            return value
+        }, {
             id: columnName,
             header: columnName
         })
