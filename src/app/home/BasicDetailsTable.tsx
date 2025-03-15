@@ -76,8 +76,8 @@ function BasicDetailsTable({ data }: props) {
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <TableHead key={header.id} className='bg-black text-white'>
+                            {headerGroup.headers.map((header,i) => (
+                                <TableHead key={header.id} className={`bg-blue-200 text-black ${(i == 0 || i == 4) ? 'text-center' : ''}`}>
                                     <div>{header.isPlaceholder ? null : flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
@@ -88,10 +88,10 @@ function BasicDetailsTable({ data }: props) {
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows.map((row)=>(
-                        <TableRow key={row.id} className='cursor-pointer hover:bg-gray-200 hover:text-black dark:hover:bg-ring/40' >
-                            {row.getVisibleCells().map((cell)=>(
-                                <TableCell key={cell.id} className='border'>
+                    {table.getRowModel().rows.map((row,i)=>(
+                        <TableRow key={row.id} className={`${i % 2 === 0 ? '' : 'bg-gray-200 '} cursor-pointer hover:bg-blue-300`} >
+                            {row.getVisibleCells().map((cell,i)=>(
+                                <TableCell key={cell.id} className={`border ${i === 0 ? 'max-w-xs overflow-hidden text-ellipsis whitespace-nowrap' : ''}`}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

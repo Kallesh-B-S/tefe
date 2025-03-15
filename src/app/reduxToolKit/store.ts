@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import LoginReducer from './slice/LoginSlice'
 import pieChartReducer from './slice/PieChartSlice'
+import loginTableReducer from './slice/LoginTableSlice'
 
 
 export const makeStore = () => {
     return configureStore({
       reducer: {
         loginForm: LoginReducer,
-        pieChart: pieChartReducer
+        pieChart: pieChartReducer,
+        loginTable: loginTableReducer
       },
     })
   }
