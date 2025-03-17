@@ -6,9 +6,11 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./reduxToolKit/hooks";
-import { setLoginEmail, setLoginError, setLoginPassword } from "./reduxToolKit/slice/LoginSlice";
+import { clearCredentials, setLoginEmail, setLoginError, setLoginPassword } from "./reduxToolKit/slice/LoginSlice";
 import { RootState } from "./reduxToolKit/store";
 import Navbar from "./components/nav/Navbar";
+import { domainNameResolver } from "./helper/functions";
+import axios from "axios";
 
 
 
@@ -34,7 +36,23 @@ export default function Home() {
     // e.preventDefault();
     try {
       // await axios.post('https://dev.alphaomegainfosys.com/test-api/auth/login', { p_emailaddr:email,p_password:password });
-      router.push('/home'); // Redirect to /ab page after submission
+      const domain = domainNameResolver(window.location.hostname)
+      const response = await axios.post(`${domain}/auth/login`,
+        { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
+
+      console.log("response ----------------------", response);
+      if (response.data.msg) {
+        router.push('/home');
+        // dispatch(setPieChartData(response.data.chartResult))
+        dispatch(clearCredentials())
+      }
+      else if (response.data.error) {
+        dispatch(setLoginError(response.data.error))
+        // dispatch(clearCredentials())
+        // router.push('/');
+      }
+      
+      // router.push('/home'); // Redirect to /ab page after submission
       // console.log(loginFormSelector);
 
     } catch (error) {
@@ -44,6 +62,7 @@ export default function Home() {
     // console.log("data",email,password);
 
   };
+
 
   useEffect(() => {
     // If there's an error, set a timeout to clear it after 5 seconds

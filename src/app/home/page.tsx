@@ -87,18 +87,17 @@ export default function HomePage() {
       try {
 
         const domain = domainNameResolver(window.location.hostname)
-        const response = await axios.post(`${domain}/auth/login`,
-          { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
+        const response = await axios.get(`${domain}/oracle/GetCarnetSummaryData/`);
         console.log("response ----------------------", response);
-        if (response.data.chartResult) {
-          dispatch(setPieChartData(response.data.chartResult))
-          dispatch(clearCredentials())
+        if (response.data) {
+          dispatch(setPieChartData(response.data))
+          // dispatch(clearCredentials())
         }
-        else if (response.data.error) {
-          dispatch(setLoginError(response.data.error))
-          dispatch(clearCredentials())
-          router.push('/');
-        }
+        // else if (response.data.error) {
+        //   dispatch(setLoginError(response.data.error))
+        //   dispatch(clearCredentials())
+        //   router.push('/');
+        // }
 
         // setData(response.data);
 
