@@ -50,40 +50,34 @@ import {
 } from '@/components/ui/select';
 import { DataTablePagination } from '../components/DataTable/DataTablePagination'
 
-export interface ParamTableType {
-    SPID: number;
-    PARAMTYPE: string | null;
-    PARAMDESC: string | null;
-    PARAMVALUE: string | null;
-    ADDLPARAMVALUE1: string | null;
-    ADDLPARAMVALUE2: string | null;
-    ADDLPARAMVALUE3: string | null;
-    ADDLPARAMVALUE4: string | null;
-    ADDLPARAMVALUE5: string | null;
-    SORTSEQ: number;
-    INACTIVECODEFLAG: string | null;
-    INACTIVEDATE: string | null;
+export interface FeesAndCommissionType {
+    SPID: string | null;
+    FEECOMMID: string | null;
+    FEETYPEID: string | null;
+    COMMRATE: string | null;
+    EFFDATE: string | null;
     CREATEDBY: string | null;
     DATECREATED: string | null;
-    LASTUPDATEDBY: string | null;
-    LASTUPDATEDDATE: string | null;
     ERRORMESG: string | null;
+    SERVICE_PROVIDER_NAME: string | null;
+    FEE_TYPE: string | null;
+    FEE_DESCRIPTION: string | null;
 }
 
 type props = {
-    data: ParamTableType[];
+    data: FeesAndCommissionType[];
 }
 
-function ParamTable({ data }: props) {
+function FeesAndCommission({ data }: props) {
     const router = useRouter()
 
-    const columnHeadersArray: Array<keyof ParamTableType> = [
-        "SPID", "PARAMTYPE", "PARAMDESC", "PARAMVALUE"
+    const columnHeadersArray: Array<keyof FeesAndCommissionType> = [
+        "FEE_TYPE", "FEE_DESCRIPTION", "COMMRATE", "EFFDATE"
     ]
 
     const finalHeaderArray = [...columnHeadersArray, "ACTIONS"]
 
-    const columnHelper = createColumnHelper<ParamTableType>();
+    const columnHelper = createColumnHelper<FeesAndCommissionType>();
 
     const columns = finalHeaderArray.map((columnName) => {
         return columnHelper.accessor((row: any) => {
@@ -202,4 +196,4 @@ function ParamTable({ data }: props) {
     )
 }
 
-export default ParamTable
+export default FeesAndCommission;

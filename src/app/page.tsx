@@ -35,22 +35,23 @@ export default function Home() {
   const handleSubmit = async () => {
     // e.preventDefault();
     try {
-      // await axios.post('https://dev.alphaomegainfosys.com/test-api/auth/login', { p_emailaddr:email,p_password:password });
-      const domain = domainNameResolver(window.location.hostname)
-      const response = await axios.post(`${domain}/auth/login`,
-        { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
+      // const domain = domainNameResolver(window.location.hostname)
+      // const response = await axios.post(`${domain}/auth/login`,
+      //   { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
 
-      console.log("response ----------------------", response);
-      if (response.data.msg) {
-        router.push('/home');
-        // dispatch(setPieChartData(response.data.chartResult))
-        dispatch(clearCredentials())
-      }
-      else if (response.data.error) {
-        dispatch(setLoginError(response.data.error))
-        // dispatch(clearCredentials())
-        // router.push('/');
-      }
+      // console.log("response ----------------------", response);
+      // if (response.data.msg) {
+      //   router.push('/home');
+      //   // dispatch(setPieChartData(response.data.chartResult))
+      //   dispatch(clearCredentials())
+      // }
+      // else if (response.data.error) {
+      //   dispatch(setLoginError(response.data.error))
+      //   // dispatch(clearCredentials())
+      //   // router.push('/');
+      // }
+
+      router.push('/home');
       
       // router.push('/home'); // Redirect to /ab page after submission
       // console.log(loginFormSelector);

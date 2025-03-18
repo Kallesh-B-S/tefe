@@ -2,12 +2,14 @@
 
 import React from 'react'
 
+
 import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
-    createColumnHelper
+    createColumnHelper,
+    getPaginationRowModel
 } from "@tanstack/react-table"
 
 import {
@@ -19,7 +21,24 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { MoreHorizontal } from "lucide-react"
+
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkFor_isEdit, setBasicDetailsEditData_isEdit, setBasicDetailsEditData_isEditError } from '../reduxToolKit/slice/LoginTableEditSlice'
+import { RootState } from '../reduxToolKit/store'
+
+
 
 export interface BasicDetailsType {
     SPID: number;
@@ -49,16 +68,24 @@ type props = {
 }
 
 function BasicDetailsTable({ data }: props) {
+    const LoginTableEditData = useSelector((state: RootState) => state.loginTableEdit)
     const router = useRouter()
+
+    const dispatch = useDispatch();
 
     const columnHeadersArray: Array<keyof BasicDetailsType> = [
         "NAMEOF", "ADDRESS1", "ADDRESS2", "CITY", "COUNTRY", "STATE", "ZIP", "ISSUINGREGION", "REPLACEMENTREGION"
     ]
 
+    const finalHeaderArray = [...columnHeadersArray, "ACTIONS"]
+
     const columnHelper = createColumnHelper<BasicDetailsType>();
 
-    const columns = columnHeadersArray.map((columnName) => {
-        return columnHelper.accessor(columnName, {
+    const columns = finalHeaderArray.map((columnName) => {
+        return columnHelper.accessor((row: any) => {
+            const value = row[columnName]
+            return value
+        }, {
             id: columnName,
             header: columnName
         })
@@ -76,8 +103,8 @@ function BasicDetailsTable({ data }: props) {
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header,i) => (
-                                <TableHead key={header.id} className={`bg-blue-200 text-black ${(i == 0 || i == 4) ? 'text-center' : ''}`}>
+                            {headerGroup.headers.map((header, i) => (
+                                <TableHead key={header.id} className={`bg-blue-200 text-black ${(i === 0 || i === 4) ? 'text-center' : ''}`}>
                                     <div>{header.isPlaceholder ? null : flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
@@ -88,18 +115,66 @@ function BasicDetailsTable({ data }: props) {
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows.map((row,i)=>(
-                        <TableRow key={row.id} className={`${i % 2 === 0 ? '' : 'bg-gray-200 '} cursor-pointer hover:bg-blue-300`} >
-                            {row.getVisibleCells().map((cell,i)=>(
-                                <TableCell key={cell.id} className={`border ${i === 0 ? 'max-w-xs overflow-hidden text-ellipsis whitespace-nowrap' : ''}`}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </TableCell>
-                            ))}
+                    {table.getRowModel().rows.length === 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={table.getHeaderGroups()[0].headers.length} className="text-center py-4">
+                                No data available
+                            </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        table.getRowModel().rows.map((row, i) => (
+                            <TableRow key={row.id} className={`${i % 2 === 0 ? '' : 'bg-gray-200 '} cursor-pointer hover:bg-blue-300`}>
+                                {row.getVisibleCells().map((cell, index) => {
+                                    if (index === 9) {
+                                        return (
+                                            <TableCell key={cell.id} className='flex justify-center'>
+                                                <div>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" className="h-4 w-6 p-0">
+                                                                <span className="sr-only">Open menu</span>
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                            <DropdownMenuItem
+                                                                onClick={() => {
+                                                                    if(checkFor_isEdit(LoginTableEditData)){
+                                                                        dispatch(setBasicDetailsEditData_isEdit(true))
+                                                                    }
+                                                                    else{
+                                                                        dispatch(setBasicDetailsEditData_isEditError("Pls add ..."))
+                                                                    }
+                                                                }}
+                                                                className='hover:!bg-amber-200'
+                                                            >
+                                                                Edit
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            {/* <DropdownMenuItem>View customer</DropdownMenuItem>
+                                            <DropdownMenuItem>View payment details</DropdownMenuItem> */}
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </TableCell>
+                                        );
+                                    }
+                                    else {
+                                        return (
+                                            <TableCell key={cell.id} className={`border ${index === 0 ? 'max-w-xs overflow-hidden text-ellipsis whitespace-nowrap' : ''}`}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        )
+                                    }
+                                }
+                                )}
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>
