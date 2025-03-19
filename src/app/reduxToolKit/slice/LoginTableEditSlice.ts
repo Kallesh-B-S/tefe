@@ -1,24 +1,31 @@
 // loginSlice.ts
 
+import { BasicDetailsType } from "@/app/home/BasicDetailsTable";
+import { FeesAndCommissionType } from "@/app/home/FeesAndCommissionTable";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 
 interface BasicDetailsEditType {
     isEdit: boolean;
     isEditError: string;
     isAdded: boolean;
-    toBeEditedData: {};
-    editedData: {};
+    toBeEditedData: {
+        p_basic_details: BasicDetailsType[];
+    };
+    editedData: {} | null;
 }
 
 interface FeesAndCommissionEditType {
     isEdit: boolean;
     isEditError: string;
     isAdded: boolean;
-    toBeEditedData: {};
-    editedData: {};
+    toBeEditedData: {
+        p_fees_comm: FeesAndCommissionType[]
+    };
+    editedData: FeesAndCommissionType | null;
 }
 
-interface loginTableEditType {
+export interface loginTableEditType {
     basicDetailsEditData: BasicDetailsEditType,
     feesAndCommissionEditData: FeesAndCommissionEditType
 }
@@ -28,15 +35,19 @@ const initialState: loginTableEditType = {
         isEdit: false,
         isEditError: '',
         isAdded: false,
-        toBeEditedData: {},
-        editedData: {}
+        toBeEditedData: {
+            p_basic_details: []
+        },
+        editedData: null
     },
     feesAndCommissionEditData: {
         isEdit: false,
-        isEditError: '',    
+        isEditError: '',
         isAdded: false,
-        toBeEditedData: {},
-        editedData: {}
+        toBeEditedData: {
+            p_fees_comm: []
+        },
+        editedData: null
     }
 };
 
@@ -58,47 +69,98 @@ export function checkFor_isEdit(state: typeof initialState): boolean {
     return true;
 }
 
+export function checkFor_isAdded(state: typeof initialState): boolean {
+
+    if (state.basicDetailsEditData.isAdded || state.feesAndCommissionEditData.isAdded) {
+        return true;
+    }
+    return false
+}
+
+export function checkFor_feesAndCommissionEditData_isEdit_isAdded(state: typeof initialState) {
+    if (state.feesAndCommissionEditData.isEdit && state.feesAndCommissionEditData.isAdded) {
+        return true
+    }
+    return false
+}
+
 const LoginTableEditSlice = createSlice({
     name: "loginTableEdit",
     initialState,
     reducers: {
-        setBasicDetailsEditData_isEdit(
-            state, action: PayloadAction<boolean>
-        ) {
+        // isEdit
+        setBasicDetailsEditData_isEdit(state, action: PayloadAction<boolean>) {
             state.basicDetailsEditData.isEdit = action.payload;
         },
-        setBasicDetailsEditData_isAdded(
-            state, action: PayloadAction<boolean>
-        ) {
+        setFeesAndCommissionEditData_isEdit(state, action: PayloadAction<boolean>) {
+            state.feesAndCommissionEditData.isEdit = action.payload;
+        },
+        // isAdded
+        setBasicDetailsEditData_isAdded(state, action: PayloadAction<boolean>) {
             state.basicDetailsEditData.isAdded = action.payload;
         },
-        setBasicDetailsEditData_isEditError(state, action:PayloadAction<string>){
+        setFeesAndCommissionEditData_isAdded(state, action: PayloadAction<boolean>) {
+            state.feesAndCommissionEditData.isAdded = action.payload;
+        },
+        // isEditError
+        setBasicDetailsEditData_isEditError(state, action: PayloadAction<string>) {
             state.basicDetailsEditData.isEditError = action.payload
         },
-        removeAdded(state) {
+        setFeesAndCommissionEditData_isEditError(state, action: PayloadAction<string>) {
+            state.feesAndCommissionEditData.isEditError = action.payload
+        },
+        // remove Added
+        removeAdded_basicDetailsEditData(state) {
             state.basicDetailsEditData.isAdded = false
         },
-        checkForBasicDetailsEditData_isEdit(state) {
-            
+        removeAdded_feesAndCommissionEditData(state) {
+            state.feesAndCommissionEditData.isAdded = false
         },
-        setBasicDetailsEditData_toBeEditedData(state, action: PayloadAction<any>) {
-            // state.basicDetailsEditData.toBeEditedData = [...state.basicDetailsEditData]
-        }
+        // set_toBeEdited
+        set_toBeEditedData_p_basic_details(state, action: PayloadAction<any>) {
+            state.basicDetailsEditData.toBeEditedData.p_basic_details = [action.payload]
+        },
+        set_toBeEditedData_p_fees_comm(state, action: PayloadAction<any>) {
+            console.log("payload ----- ", action.payload?.FEE_TYPE);
 
-        // setLoginTableData(state, action: PayloadAction<{
-        //     basicDetailsData:BasicDetailsType[],
-        //     ParamTableData:ParamTableType[],
-        //     FeesAndCommissionTableData:FeesAndCommissionType[]
-        // }>) {
-        //     state.basicDetailsData = action.payload.basicDetailsData;
-        //     state.ParamTableData = action.payload.ParamTableData;
-        //     state.FeesAndCommissionTableData = action.payload.FeesAndCommissionTableData
-        // },
+            state.feesAndCommissionEditData.toBeEditedData.p_fees_comm = [action.payload]
+        },
+        // cancel All
+        cancelAll(state) {
+            state.basicDetailsEditData = initialState.basicDetailsEditData,
+            state.feesAndCommissionEditData = initialState.feesAndCommissionEditData
+        },
+        // set edited data
+        set_feesAndCommissionEditData_editedData(state, action:PayloadAction<any>){
+            // state.feesAndCommissionEditData.editedData = {...action.payload.p_fees_comm}
+            state.feesAndCommissionEditData.editedData = {...state.feesAndCommissionEditData.toBeEditedData.p_fees_comm[0], ...action.payload.p_fees_comm}
+            state.feesAndCommissionEditData.toBeEditedData.p_fees_comm = [{...state.feesAndCommissionEditData.toBeEditedData.p_fees_comm[0], ...action.payload.p_fees_comm}]
+        }
     },
 });
 
 // Export actions
-export const { setBasicDetailsEditData_isEdit, setBasicDetailsEditData_isAdded, removeAdded , setBasicDetailsEditData_isEditError} = LoginTableEditSlice.actions;
+export const {
+    setBasicDetailsEditData_isEdit,
+    setFeesAndCommissionEditData_isEdit,
+
+    setBasicDetailsEditData_isAdded,
+    setFeesAndCommissionEditData_isAdded,
+
+    removeAdded_basicDetailsEditData,
+    removeAdded_feesAndCommissionEditData,
+
+    setBasicDetailsEditData_isEditError,
+    setFeesAndCommissionEditData_isEditError,
+
+    set_toBeEditedData_p_basic_details,
+    set_toBeEditedData_p_fees_comm,
+
+    cancelAll,
+
+    set_feesAndCommissionEditData_editedData,
+
+} = LoginTableEditSlice.actions;
 
 // Export reducer
 export default LoginTableEditSlice.reducer;

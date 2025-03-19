@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {
     ColumnDef,
@@ -8,7 +8,9 @@ import {
     getCoreRowModel,
     useReactTable,
     createColumnHelper,
-    getPaginationRowModel
+    getPaginationRowModel,
+    ColumnFiltersState,
+    getFilteredRowModel,
 } from "@tanstack/react-table"
 
 import {
@@ -29,26 +31,17 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { Input } from "@/components/ui/input"
+
 import { MoreHorizontal } from "lucide-react"
 
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
-import {
-    ChevronLeft,
-    ChevronRight,
-    ChevronsLeft,
-    ChevronsRight,
-} from "lucide-react"
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { DataTablePagination } from '../components/DataTable/DataTablePagination'
+import { checkFor_feesAndCommissionEditData_isEdit_isAdded, checkFor_isEdit, set_toBeEditedData_p_fees_comm, setFeesAndCommissionEditData_isEdit, setFeesAndCommissionEditData_isEditError } from '../reduxToolKit/slice/LoginTableEditSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../reduxToolKit/store'
 
 export interface FeesAndCommissionType {
     SPID: string | null;
@@ -68,8 +61,30 @@ type props = {
     data: FeesAndCommissionType[];
 }
 
+function useDebounce(value: string, delay: number) {
+    const [debouncedValue, setDebouncedValue] = React.useState(value);
+
+    React.useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+
 function FeesAndCommission({ data }: props) {
+    const LoginTableEditData = useSelector((state: RootState) => state.loginTableEdit);
+    const dispatch = useDispatch();
     const router = useRouter()
+
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [searchTerm, setSearchTerm] = React.useState('');
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     const columnHeadersArray: Array<keyof FeesAndCommissionType> = [
         "FEE_TYPE", "FEE_DESCRIPTION", "COMMRATE", "EFFDATE"
@@ -85,7 +100,11 @@ function FeesAndCommission({ data }: props) {
             return value
         }, {
             id: columnName,
-            header: columnName
+            header: columnName,
+            filterFn: (row, columnId, filterValue) => {
+                const cellValue = row.getValue(columnId);
+                return typeof cellValue === 'string' && cellValue.toLowerCase().includes(filterValue.toLowerCase());
+            },
         })
     })
 
@@ -93,13 +112,25 @@ function FeesAndCommission({ data }: props) {
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel()
+        getPaginationRowModel: getPaginationRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
     })
 
-
+    useEffect(() => {
+        table.getColumn("FEE_DESCRIPTION")?.setFilterValue(debouncedSearchTerm);
+    }, [debouncedSearchTerm, table]);
 
     return (
         <div>
+            <div className="flex items-center py-4">
+                <Input
+                    placeholder="Search by fee description..."
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
             <div className='mt-6 rounded-lg overflow-hidden border border-dashed'>
                 <Table className='border'>
                     <TableHeader>
@@ -141,14 +172,25 @@ function FeesAndCommission({ data }: props) {
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                                 <DropdownMenuItem
-                                                                    // onClick={() => navigator.clipboard.writeText(payment.id)}
+                                                                    onClick={() => {
+                                                                        if (checkFor_isEdit(LoginTableEditData)) {
+                                                                            if (checkFor_feesAndCommissionEditData_isEdit_isAdded(LoginTableEditData)) {
+                                                                                dispatch(setFeesAndCommissionEditData_isEditError("Currently one row at a time is allowed, to change you can remove and cancel"))
+                                                                            }
+                                                                            else {
+                                                                                dispatch(setFeesAndCommissionEditData_isEdit(true))
+                                                                                dispatch(set_toBeEditedData_p_fees_comm(row.original))
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            dispatch(setFeesAndCommissionEditData_isEditError("Pls add || save || cancel the previous edit to continue"))
+                                                                        }
+                                                                    }}
                                                                     className='hover:!bg-amber-200'
                                                                 >
                                                                     Edit
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuSeparator />
-                                                                {/* <DropdownMenuItem>View customer</DropdownMenuItem>
-                                                <DropdownMenuItem>View payment details</DropdownMenuItem> */}
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
                                                     </div>

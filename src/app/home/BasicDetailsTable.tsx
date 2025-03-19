@@ -35,7 +35,7 @@ import { MoreHorizontal } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useDispatch, useSelector } from 'react-redux'
-import { checkFor_isEdit, setBasicDetailsEditData_isEdit, setBasicDetailsEditData_isEditError } from '../reduxToolKit/slice/LoginTableEditSlice'
+import { checkFor_isEdit, set_toBeEditedData_p_basic_details, setBasicDetailsEditData_isEdit, setBasicDetailsEditData_isEditError } from '../reduxToolKit/slice/LoginTableEditSlice'
 import { RootState } from '../reduxToolKit/store'
 
 
@@ -142,6 +142,7 @@ function BasicDetailsTable({ data }: props) {
                                                                 onClick={() => {
                                                                     if(checkFor_isEdit(LoginTableEditData)){
                                                                         dispatch(setBasicDetailsEditData_isEdit(true))
+                                                                        dispatch(set_toBeEditedData_p_basic_details(row.original))
                                                                     }
                                                                     else{
                                                                         dispatch(setBasicDetailsEditData_isEditError("Pls add ..."))
