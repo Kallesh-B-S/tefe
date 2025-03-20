@@ -4,7 +4,7 @@ const domainNameResolver = (domain: string) => {
         // return "http://localhost:3000";
         return "https://dev.alphaomegainfosys.com/test-api"
     } else {
-        return `https://${domain}`;
+        return `https://${domain}/test-api`;
     }
 }
 

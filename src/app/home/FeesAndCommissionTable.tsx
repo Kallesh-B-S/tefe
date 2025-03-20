@@ -119,7 +119,7 @@ function FeesAndCommission({ data }: props) {
                                     <TableHead key={header.id} className={`bg-blue-200 text-black ${(i === 0 || i === 4) ? 'text-center' : ''}`}>
                                         <div>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</div>
                                         {header.column.getCanFilter() ? (
-                                            <div className="grid place-content-center hidden">
+                                            <div className="place-content-center hidden">
                                                 <Filter column={header.column} />
                                             </div>
                                         ) : null}
