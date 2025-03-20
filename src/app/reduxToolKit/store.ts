@@ -3,6 +3,7 @@ import LoginReducer from './slice/LoginSlice'
 import pieChartReducer from './slice/PieChartSlice'
 import loginTableReducer from './slice/LoginTableSlice'
 import LoginTableEditReducer from './slice/LoginTableEditSlice'
+import TempStateReducer from './slice/TempSlice'
 
 export const makeStore = () => {
     return configureStore({
@@ -10,8 +11,10 @@ export const makeStore = () => {
         loginForm: LoginReducer,
         pieChart: pieChartReducer,
         loginTable: loginTableReducer,
-        loginTableEdit: LoginTableEditReducer
+        loginTableEdit: LoginTableEditReducer,
+        tempState: TempStateReducer
       },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware()
     })
   }
 

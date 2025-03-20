@@ -4,12 +4,10 @@ import React from 'react'
 
 
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
     createColumnHelper,
-    getPaginationRowModel
 } from "@tanstack/react-table"
 
 import {
@@ -32,7 +30,6 @@ import {
 
 import { MoreHorizontal } from "lucide-react"
 
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkFor_isEdit, set_toBeEditedData_p_basic_details, setBasicDetailsEditData_isEdit, setBasicDetailsEditData_isEditError } from '../reduxToolKit/slice/LoginTableEditSlice'
@@ -69,7 +66,6 @@ type props = {
 
 function BasicDetailsTable({ data }: props) {
     const LoginTableEditData = useSelector((state: RootState) => state.loginTableEdit)
-    const router = useRouter()
 
     const dispatch = useDispatch();
 
@@ -82,6 +78,7 @@ function BasicDetailsTable({ data }: props) {
     const columnHelper = createColumnHelper<BasicDetailsType>();
 
     const columns = finalHeaderArray.map((columnName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return columnHelper.accessor((row: any) => {
             const value = row[columnName]
             return value

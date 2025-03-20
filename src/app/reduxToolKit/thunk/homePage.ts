@@ -4,17 +4,20 @@ import { domainNameResolver } from "@/app/helper/functions";
 import axios from "axios";
 import { AppDispatch } from "../store";
 import { setPieChartData } from "../slice/PieChartSlice";
-import { setLoginTableData } from "../slice/LoginTableSlice";
+import { LoginUser, setLoginTableData } from "../slice/LoginTableSlice";
 import { cancelAll, loginTableEditType } from "../slice/LoginTableEditSlice";
+import { LoginState } from "../slice/LoginSlice";
+import { TempState } from "../slice/TempSlice";
 
 export const getCarnetSummaryData = async (
     dispatch: AppDispatch,
     setError: (error: string | null) => void,
-    setLoading: (isLoading: boolean) => void
+    setLoading: (isLoading: boolean) => void,
+    LoginData:LoginState
 ) => {
     try {
         const domain = domainNameResolver(window.location.hostname)
-        const response = await axios.get(`${domain}/oracle/GetCarnetSummaryData/`);
+        const response = await axios.get(`${domain}/oracle/GetCarnetSummaryData/${LoginData.p_emailaddr}`);
         console.log("response ----------------------", response);
         if (response.data) {
             dispatch(setPieChartData(response.data))
@@ -37,8 +40,8 @@ export const getHomePageData = async (
 ) => {
     try {
         const domain = domainNameResolver(window.location.hostname)
-        // const response = await axios.get(`${domain}/oracle/GetHomePageData/${id}`);
-        const response = await axios.get(`${domain}/data/${id}`);
+        const response = await axios.get(`${domain}/oracle/GetHomePageData/${id}`);
+        // const response = await axios.get(`${domain}/data/${id}`);
         // console.log("response ----------------------", response);
         if (response.data.data['p_basic_details']) {
             dispatch(setLoginTableData(
@@ -50,13 +53,15 @@ export const getHomePageData = async (
             ))
         }
     } catch (error) {
-
+        console.log(error);
+        
     }
 }
 
 export const saveEdited = async (
     dispatch:AppDispatch,
-    LoginTableEditData:any,
+    LoginTableEditData:loginTableEditType,
+    TempData:TempState,
     commissionRate:string,
     effectiveDate:string
 )=>{
@@ -65,13 +70,15 @@ export const saveEdited = async (
         console.log(LoginTableEditData);
         
         // const response = await axios.get(`${domain}/oracle/GetHomePageData/${id}`);
-        const response = await axios.post(`${domain}/postdata/${LoginTableEditData?.feesAndCommissionEditData?.toBeEditedData?.p_fees_comm[0]?.FEECOMMID}`, {
+        const response = await axios.patch(`${domain}/oracle/UpdateFeeComm`, {
             p_fees_comm: {
-                FEECOMMID: LoginTableEditData?.feesAndCommissionEditData?.toBeEditedData?.p_fees_comm[0]?.FEECOMMID,
+                P_FEECOMMID: LoginTableEditData?.feesAndCommissionEditData?.toBeEditedData?.p_fees_comm[0]?.FEECOMMID,
                 // FEE_TYPE: feeType,
                 // FEE_DESCRIPTION: description,
-                COMMRATE: commissionRate,
-                EFFDATE: effectiveDate
+                P_RATE: commissionRate,
+                P_EFFDATE: effectiveDate,
+                P_USERID: TempData.p_emailaddr
+
             }
         }, {
             headers: {
@@ -80,6 +87,7 @@ export const saveEdited = async (
         });
         if(response.statusText === 'OK'){
             dispatch(cancelAll())
+            dispatch(LoginUser ({id:TempData.active_chart_SPID}))
         }
     
     } catch (error) {

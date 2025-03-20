@@ -48,9 +48,6 @@ function BasicDetailsTableEditForm() {
         }));
     };
 
-    // Handle form submission
-    const handleSubmit = () => {
-    };
 
     return (
         <div className="w-[93%] bg-white m-auto p-2">

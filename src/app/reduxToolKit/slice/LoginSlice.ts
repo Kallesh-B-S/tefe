@@ -1,7 +1,7 @@
 // loginSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface LoginState {
+export interface LoginState {
     p_emailaddr: string | null;
     p_password: string | null;
     error: string | null;

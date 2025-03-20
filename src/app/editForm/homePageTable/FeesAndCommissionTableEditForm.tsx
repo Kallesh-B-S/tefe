@@ -1,17 +1,18 @@
 'use client'
 
-import { domainNameResolver } from '@/app/helper/functions';
-import { cancelAll, removeAdded_feesAndCommissionEditData, set_feesAndCommissionEditData_editedData, setFeesAndCommissionEditData_isAdded, setFeesAndCommissionEditData_isEdit } from '@/app/reduxToolKit/slice/LoginTableEditSlice';
+import { removeAdded_feesAndCommissionEditData, set_feesAndCommissionEditData_editedData, setFeesAndCommissionEditData_isAdded, setFeesAndCommissionEditData_isEdit } from '@/app/reduxToolKit/slice/LoginTableEditSlice';
+import { TempState } from '@/app/reduxToolKit/slice/TempSlice';
 import { RootState } from '@/app/reduxToolKit/store';
 import { saveEdited } from '@/app/reduxToolKit/thunk/homePage';
 import { Button } from '@/components/ui/button'
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 function FeesAndCommissionTableEditForm() {
     const dispatch = useDispatch();
     const LoginTableEditData = useSelector((state: RootState) => state.loginTableEdit);
+    const TempData:TempState = useSelector((state:RootState)=>state.tempState)
+    
 
     // State to hold the input values
     // const [feeType, setFeeType] = useState('');
@@ -30,16 +31,16 @@ function FeesAndCommissionTableEditForm() {
         }
     }, [LoginTableEditData]);
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputDate = e.target.value; // e.g., "2025-03-19"
-        const [year, month, day] = inputDate.split('-'); // Split the date into components
-        const formattedDate = `${month}/${day}/${year}`; // Rearrange to mm/dd/yyyy
-        setEffectiveDate(formattedDate); // Set the formatted date in state
-        // return formattedDate
-    };
+    // const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const inputDate = e.target.value; // e.g., "2025-03-19"
+    //     const [year, month, day] = inputDate.split('-'); // Split the date into components
+    //     const formattedDate = `${month}/${day}/${year}`; // Rearrange to mm/dd/yyyy
+    //     setEffectiveDate(formattedDate); // Set the formatted date in state
+    //     // return formattedDate
+    // };
 
     async function handleSubmit() {
-        await saveEdited(dispatch, LoginTableEditData, commissionRate, effectiveDate);
+        await saveEdited(dispatch, LoginTableEditData,TempData, commissionRate, effectiveDate);
     }
 
     return (
@@ -103,7 +104,7 @@ function FeesAndCommissionTableEditForm() {
                     </Button>
                     <Button
                         className="bg-green-400 text-black w-15 h-8 hover:bg-green-500 active:bg-black active:text-green-500"
-                        // disabled={LoginTableEditData.feesAndCommissionEditData.isAdded}
+                        disabled={LoginTableEditData.feesAndCommissionEditData.isAdded}
                         onClick={() => {
                             dispatch(set_feesAndCommissionEditData_editedData(
                                 {

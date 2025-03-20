@@ -3,7 +3,6 @@
 import React from 'react'
 
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -31,23 +30,9 @@ import {
 
 import { MoreHorizontal } from "lucide-react"
 
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
-import {
-    ChevronLeft,
-    ChevronRight,
-    ChevronsLeft,
-    ChevronsRight,
-} from "lucide-react"
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { DataTablePagination } from '../components/DataTable/DataTablePagination'
 
 export interface ParamTableType {
@@ -75,7 +60,6 @@ type props = {
 }
 
 function ParamTable({ data }: props) {
-    const router = useRouter()
 
     const columnHeadersArray: Array<keyof ParamTableType> = [
         "SPID", "PARAMTYPE", "PARAMDESC", "PARAMVALUE"
@@ -86,6 +70,7 @@ function ParamTable({ data }: props) {
     const columnHelper = createColumnHelper<ParamTableType>();
 
     const columns = finalHeaderArray.map((columnName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return columnHelper.accessor((row: any) => {
             const value = row[columnName]
             return value

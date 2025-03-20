@@ -11,6 +11,7 @@ import { RootState } from "./reduxToolKit/store";
 import Navbar from "./components/nav/Navbar";
 import { domainNameResolver } from "./helper/functions";
 import axios from "axios";
+import { set_p_emailaddr } from "./reduxToolKit/slice/TempSlice";
 
 
 
@@ -35,23 +36,24 @@ export default function Home() {
   const handleSubmit = async () => {
     // e.preventDefault();
     try {
-      // const domain = domainNameResolver(window.location.hostname)
-      // const response = await axios.post(`${domain}/auth/login`,
-      //   { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
+      const domain = domainNameResolver(window.location.hostname)
+      const response = await axios.post(`${domain}/auth/login`,
+        { p_emailaddr: loginFormSelector.p_emailaddr, p_password: loginFormSelector.p_password });
 
-      // console.log("response ----------------------", response);
-      // if (response.data.msg) {
-      //   router.push('/home');
-      //   // dispatch(setPieChartData(response.data.chartResult))
-      //   dispatch(clearCredentials())
-      // }
-      // else if (response.data.error) {
-      //   dispatch(setLoginError(response.data.error))
-      //   // dispatch(clearCredentials())
-      //   // router.push('/');
-      // }
+      console.log("response ----------------------", response);
+      if (response.data.msg) {
+        router.push('/home');
+        // dispatch(setPieChartData(response.data.chartResult))
+        dispatch(set_p_emailaddr(loginFormSelector.p_emailaddr))
+        dispatch(clearCredentials())
+      }
+      else if (response.data.error) {
+        dispatch(setLoginError(response.data.error))
+        // dispatch(clearCredentials())
+        // router.push('/');
+      }
 
-      router.push('/home');
+      // router.push('/home');
       
       // router.push('/home'); // Redirect to /ab page after submission
       // console.log(loginFormSelector);
@@ -75,7 +77,7 @@ export default function Home() {
       // Cleanup the timer on component unmount or when error changes
       return () => clearTimeout(timer);
     }
-  }, [loginFormSelector.error]);
+  }, [loginFormSelector.error,dispatch]);
 
   return (
     <>

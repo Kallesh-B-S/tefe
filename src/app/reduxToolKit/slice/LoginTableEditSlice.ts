@@ -12,7 +12,7 @@ interface BasicDetailsEditType {
     toBeEditedData: {
         p_basic_details: BasicDetailsType[];
     };
-    editedData: {} | null;
+    editedData: object | null;
 }
 
 interface FeesAndCommissionEditType {
@@ -117,9 +117,11 @@ const LoginTableEditSlice = createSlice({
             state.feesAndCommissionEditData.isAdded = false
         },
         // set_toBeEdited
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         set_toBeEditedData_p_basic_details(state, action: PayloadAction<any>) {
             state.basicDetailsEditData.toBeEditedData.p_basic_details = [action.payload]
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         set_toBeEditedData_p_fees_comm(state, action: PayloadAction<any>) {
             console.log("payload ----- ", action.payload?.FEE_TYPE);
 
@@ -127,10 +129,11 @@ const LoginTableEditSlice = createSlice({
         },
         // cancel All
         cancelAll(state) {
-            state.basicDetailsEditData = initialState.basicDetailsEditData,
-            state.feesAndCommissionEditData = initialState.feesAndCommissionEditData
+            state.basicDetailsEditData = initialState.basicDetailsEditData;
+            state.feesAndCommissionEditData = initialState.feesAndCommissionEditData;
         },
         // set edited data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         set_feesAndCommissionEditData_editedData(state, action:PayloadAction<any>){
             // state.feesAndCommissionEditData.editedData = {...action.payload.p_fees_comm}
             state.feesAndCommissionEditData.editedData = {...state.feesAndCommissionEditData.toBeEditedData.p_fees_comm[0], ...action.payload.p_fees_comm}
