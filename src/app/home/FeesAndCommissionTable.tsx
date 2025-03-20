@@ -9,7 +9,18 @@ import {
     createColumnHelper,
     getPaginationRowModel,
     getFilteredRowModel,
+    SortingState,
+    getSortedRowModel,
 } from "@tanstack/react-table"
+
+import {
+    CircleCheckIcon,
+    CircleXIcon,
+    ArrowUpDown,
+    ArrowDown,
+    ArrowUp,
+} from 'lucide-react'
+
 import {
     Table,
     TableBody,
@@ -58,6 +69,9 @@ function FeesAndCommission({ data }: props) {
     const dispatch = useDispatch();
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+    const [sorting, setSorting] = useState<SortingState>([])
+
     const [searchTerm, setSearchTerm] = useState('');
 
     const columnHeadersArray: Array<keyof FeesAndCommissionType> = [
@@ -70,9 +84,31 @@ function FeesAndCommission({ data }: props) {
 
     const columns = finalHeaderArray.map((columnName) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return columnHelper.accessor((row:any) => row[columnName], {
+        return columnHelper.accessor((row: any) => row[columnName], {
             id: columnName,
-            header: columnName,
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        className="pl-1 w-full flex justify-between"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        {/* {columnName[0].toUpperCase() + columnName.slice(1)} */}
+
+                        {column.getIsSorted() === "asc" && (
+                            <ArrowUp className="ml-2 h-4 w-4" />
+                        )}
+
+                        {column.getIsSorted() === "desc" && (
+                            <ArrowDown className="ml-2 h-4 w-4" />
+                        )}
+
+                        {column.getIsSorted() !== "desc" && column.getIsSorted() !== "asc" && (
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                        )}
+                    </Button>
+                )
+            },
             filterFn: (row, columnId, filterValue) => {
                 const cellValue = row.getValue(columnId);
                 return typeof cellValue === 'string' && cellValue.toLowerCase().includes(filterValue.toLowerCase());
@@ -84,12 +120,15 @@ function FeesAndCommission({ data }: props) {
         data,
         columns,
         state: {
+            sorting,
             columnFilters,
         },
+        onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
     })
 
     // Handle filter change for the first column
@@ -183,7 +222,13 @@ function FeesAndCommission({ data }: props) {
                     </TableBody>
                 </Table>
             </div>
-            <div>
+            <div className='flex'>
+                <Button
+                    variant="outline"
+                    onClick={() => table.resetSorting()}
+                >
+                    Reset Sorting
+                </Button>
                 <DataTablePagination table={table} />
             </div>
         </div>
