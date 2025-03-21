@@ -14,8 +14,8 @@ import {
 } from "@tanstack/react-table"
 
 import {
-    CircleCheckIcon,
-    CircleXIcon,
+    // CircleCheckIcon,
+    // CircleXIcon,
     ArrowUpDown,
     ArrowDown,
     ArrowUp,
@@ -93,7 +93,7 @@ function FeesAndCommission({ data }: props) {
                         className="pl-1 w-full flex justify-between"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        {/* {columnName[0].toUpperCase() + columnName.slice(1)} */}
+                        {columnName[0].toUpperCase() + columnName.slice(1)}
 
                         {column.getIsSorted() === "asc" && (
                             <ArrowUp className="ml-2 h-4 w-4" />
@@ -155,7 +155,7 @@ function FeesAndCommission({ data }: props) {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header, i) => (
-                                    <TableHead key={header.id} className={`bg-blue-200 text-black ${(i === 0 || i === 4) ? 'text-center' : ''}`}>
+                                    <TableHead key={header.id} className={`border bg-blue-200 text-black ${(i === 0 || i === 4) ? 'text-center' : ''}`}>
                                         <div>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</div>
                                         {header.column.getCanFilter() ? (
                                             <div className="place-content-center hidden">
@@ -222,8 +222,8 @@ function FeesAndCommission({ data }: props) {
                     </TableBody>
                 </Table>
             </div>
-            <div className='flex'>
-                <Button
+            <div className='flex justify-end'>
+                <Button className='mt-5'
                     variant="outline"
                     onClick={() => table.resetSorting()}
                 >
